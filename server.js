@@ -47,36 +47,9 @@ app.get('/generateQuiz/:subject/:topic', async(req, res)=>{
         if(questionSheet.hard.maxMarks > 0){
             questionSheet.hard.message(`Questions worth ${questionSheet.hard.maxMarks} could not be generated. Please create questions to complete the paper.`);
         }
-        //res.status(200).send(questionSheet);
-        //printing easy section
-        //doc.text("SECTION 1: EASY");
-        // if("message" in questionSheet.easy){
-        //     doc.text(questionSheet.easy.message);
-        // }
-        // let questionCount = 1;
-        // for(let obj of questionSheet.easy.questionPaper){
-        //     doc.text(`Q${questionCount}: ${obj.value[0]} \t ${obj.value[3]}`, 100, 100);
-        //     questionCount++;
-        // }
-        // if("message" in questionSheet.medium){
-        //     doc.text(questionSheet.easy.message);
-        // }
-        // for(let obj of questionSheet.medium.questionPaper){
-        //     doc.text(`Q${questionCount}: ${obj.value[0]} \t ${obj.value[3]}`, 100, 100);
-        //     questionCount++;
-        // }
-        // if("message" in questionSheet.hard){
-        //     doc.text(questionSheet.easy.message);
-        // }
-        // for(let obj of questionSheet.hard.questionPaper){
-        //     doc.text(`Q${questionCount}: ${obj.value[0]} \t ${obj.value[3]}`, 100, 100);
-        //     questionCount++;
-        // }
-
-        // doc.text("\n\n\n All the Best!")
         const stream = res.writeHead(200, {
             'Content-Type': 'application/pdf',
-            'Content-Disposition': 'inline'
+            'Content-Disposition': 'inline; filename=QuizPaper.pdf'
         });
         pdfMakerService.buildPDF(
             (chunk)=>stream.write(chunk),
@@ -116,7 +89,16 @@ app.post('/generateQuiz/:subject/:topic', async(req, res)=>{
         if(questionSheet.hard.maxMarks > 0){
             questionSheet.hard.message(`Questions worth ${questionSheet.hard.maxMarks} could not be generated. Please create questions to complete the paper.`);
         }
-        res.status(200).send(questionSheet);
+        //res.status(200).send(questionSheet);
+        const stream = res.writeHead(200, {
+            'Content-Type': 'application/pdf',
+            'Content-Disposition': 'inline'
+        });
+        pdfMakerService.buildPDF(
+            (chunk)=>stream.write(chunk),
+            () => stream.end(),
+            questionSheet
+        );
     }
 
     catch(e){
