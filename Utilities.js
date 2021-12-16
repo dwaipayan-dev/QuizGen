@@ -9,6 +9,15 @@ const questionBank = require('./QuestionBank')
 //     console.log(obj)
 // }
 
+const fs = require('fs');
+let data = JSON.stringify(questionBank);
+fs.writeFile('questionB.json',data, (err)=>{
+    if(err)
+        console.log(err);
+    else
+        console.log("Question Bank successfully written as external json.");
+});
+
 const Utility = {
     sortQuestionsToMarks(QuestionArr){
         return QuestionArr.sort((firstElement, secondElement)=>{
